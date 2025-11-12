@@ -80,10 +80,11 @@ jobs:
           no_output_timeout: 10m
   local_testing:
     docker:
-      - image: cimg/python:3.12
+      # - image: cimg/python:3.12
+      - image: steadson/litellm-ci:v1.0
         auth:
-          username: ${DOCKERHUB_USERNAME}
-          password: ${DOCKERHUB_PASSWORD}
+          username: ${steadson}
+          password: ${Asiye0802!}
     working_directory: ~/project
 
     steps:
@@ -94,65 +95,66 @@ jobs:
           command: |
             echo "Git commit hash: $CIRCLE_SHA1"
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum ".circleci/requirements.txt" }}
-      - run:
-          name: Install Dependencies
-          command: |
-            python -m pip install --upgrade pip
-            python -m pip install -r .circleci/requirements.txt
-            pip install "pytest==7.3.1"
-            pip install "pytest-retry==1.6.3"
-            pip install "pytest-asyncio==0.21.1"
-            pip install "pytest-cov==5.0.0"
-            pip install "mypy==1.18.2"
-            pip install "google-generativeai==0.3.2"
-            pip install "google-cloud-aiplatform==1.43.0"
-            pip install pyarrow
-            pip install "boto3==1.36.0"
-            pip install "aioboto3==13.4.0"
-            pip install langchain
-            pip install lunary==0.2.5
-            pip install "azure-identity==1.16.1"
-            pip install "langfuse==2.59.7"
-            pip install "logfire==0.29.0"
-            pip install numpydoc
-            pip install traceloop-sdk==0.21.1
-            pip install opentelemetry-api==1.25.0
-            pip install opentelemetry-sdk==1.25.0
-            pip install opentelemetry-exporter-otlp==1.25.0
-            pip install openai==1.100.1
-            pip install prisma==0.11.0
-            pip install "detect_secrets==1.5.0"
-            pip install "httpx==0.24.1"
-            pip install "respx==0.22.0"
-            pip install fastapi
-            pip install "gunicorn==21.2.0"
-            pip install "anyio==4.2.0"
-            pip install "aiodynamo==23.10.1"
-            pip install "asyncio==3.4.3"
-            pip install "apscheduler==3.10.4"
-            pip install "PyGithub==1.59.1"
-            pip install argon2-cffi
-            pip install "pytest-mock==3.12.0"
-            pip install python-multipart
-            pip install google-cloud-aiplatform
-            pip install prometheus-client==0.20.0
-            pip install "pydantic==2.10.2"
-            pip install "diskcache==5.6.1"
-            pip install "Pillow==10.3.0"
-            pip install "jsonschema==4.22.0"
-            pip install "pytest-xdist==3.6.1"
-            pip install "websockets==13.1.0"
-            pip install semantic_router --no-deps
-            pip install aurelio_sdk --no-deps
-            pip uninstall posthog -y
+      # - restore_cache:
+      #     keys:
+      #       - v1-dependencies-{{ checksum ".circleci/requirements.txt" }}
+      # - run:
+      #     name: Install Dependencies
+      #     command: |
+      #       python -m pip install --upgrade pip
+      #       python -m pip install -r .circleci/requirements.txt
+      #       pip install "pytest==7.3.1"
+      #       pip install "pytest-retry==1.6.3"
+      #       pip install "pytest-asyncio==0.21.1"
+      #       pip install "pytest-cov==5.0.0"
+      #       pip install "mypy==1.18.2"
+      #       pip install "google-generativeai==0.3.2"
+      #       pip install "google-cloud-aiplatform==1.43.0"
+      #       pip install pyarrow
+      #       pip install "boto3==1.36.0"
+      #       pip install "aioboto3==13.4.0"
+      #       pip install langchain
+      #       pip install lunary==0.2.5
+      #       pip install "azure-identity==1.16.1"
+      #       pip install "langfuse==2.59.7"
+      #       pip install "logfire==0.29.0"
+      #       pip install numpydoc
+      #       pip install traceloop-sdk==0.21.1
+      #       pip install opentelemetry-api==1.25.0
+      #       pip install opentelemetry-sdk==1.25.0
+      #       pip install opentelemetry-exporter-otlp==1.25.0
+      #       pip install openai==1.100.1
+      #       pip install prisma==0.11.0
+      #       pip install "detect_secrets==1.5.0"
+      #       pip install "httpx==0.24.1"
+      #       pip install "respx==0.22.0"
+      #       pip install fastapi
+      #       pip install "gunicorn==21.2.0"
+      #       pip install "anyio==4.2.0"
+      #       pip install "aiodynamo==23.10.1"
+      #       pip install "asyncio==3.4.3"
+      #       pip install "apscheduler==3.10.4"
+      #       pip install "PyGithub==1.59.1"
+      #       pip install argon2-cffi
+      #       pip install "pytest-mock==3.12.0"
+      #       pip install python-multipart
+      #       pip install google-cloud-aiplatform
+      #       pip install prometheus-client==0.20.0
+      #       pip install "pydantic==2.10.2"
+      #       pip install "diskcache==5.6.1"
+      #       pip install "Pillow==10.3.0"
+      #       pip install "jsonschema==4.22.0"
+      #       pip install "pytest-xdist==3.6.1"
+      #       pip install "websockets==13.1.0"
+      #       pip install semantic_router --no-deps
+      #       pip install aurelio_sdk --no-deps
+      #       pip uninstall posthog -y
+      # - setup_litellm_enterprise_pip
+      # - save_cache:
+      #     paths:
+      #       - ./venv
+      #     key: v1-dependencies-{{ checksum ".circleci/requirements.txt" }}
       - setup_litellm_enterprise_pip
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum ".circleci/requirements.txt" }}
       - run:
           name: Run prisma ./docker/entrypoint.sh
           command: |
